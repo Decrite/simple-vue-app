@@ -1,0 +1,5 @@
+coverage
+lib
+mocks
+node_modules
+.npm
