@@ -1,7 +1,7 @@
 <template>
   <header class="header">MyPhotoGallery</header>
   <div class="camera-container">
-    <camera v-if="!isMobile" :resolution="{ width: 375, height: 812 }" ref="camera" autoplay></camera>
+    <camera v-if="!isMobile" ref="camera" autoplay></camera>
     <input v-else type="file" name="image" accept="image/*" capture="user" @change="handleImageInput" ref="fileInput"
       style="display: none" />
     <button v-if="!isMobile" class="round-button toggle-button" @click="toggleCamera"></button>
