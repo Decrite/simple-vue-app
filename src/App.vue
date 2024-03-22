@@ -1,7 +1,11 @@
-
 <template>
-  <CameraView @imageCaptured="addImage" />
-  <ImageGallery :images="images" />
+
+  <div class="camera-container">
+    <CameraView @imageCaptured="addImage" />
+  </div>
+  <div class="gallery-container">
+    <ImageGallery :images="images" />
+  </div>
 
 </template>
 
@@ -26,3 +30,39 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+/* Gesamtes Layout */
+.camera-container,
+.gallery-container {
+  height: 100vh;
+  /* Stellt sicher, dass beide Container die volle Höhe des Viewports einnehmen */
+}
+
+.camera-container {
+  float: left;
+  width: 100vb;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.gallery-container {
+  float: right;
+  width: 100vb;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+
+  .camera-container,
+  .gallery-container {
+    width: 100%;
+    height: 50vh;
+    float: none;
+  }
+
+  .gallery-container {
+    overflow-y: auto;
+  }
+}
+</style>
