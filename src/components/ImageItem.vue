@@ -2,7 +2,7 @@
     <div class="image-item" @mouseover="hover = true" @mouseleave="hover = false">
         <img :src="imageSrc" :alt="'Captured Image'" class="captured-image" />
         <div class="overlay" v-if="hover">
-            <button @click="openCarousel">🔍</button>
+            <!-- <button @click="openCarousel">🔍</button>-->
             <button @click="emitRemove">🗑️</button>
         </div>
     </div>
