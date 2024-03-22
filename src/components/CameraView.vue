@@ -1,4 +1,5 @@
 <template>
+  <header class="header">MyPhotoGallery</header>
   <div class="camera-container">
     <camera
       v-if="!isMobile"
@@ -132,6 +133,7 @@ export default defineComponent({
 }
 
 .phone {
+  padding-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -139,5 +141,12 @@ export default defineComponent({
 
 .phone .camera-icon path {
   fill: white; /* Change color to white */
+}
+
+.header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
 }
 </style>
