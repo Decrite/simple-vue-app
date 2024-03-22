@@ -1,6 +1,8 @@
 <template>
-  <camera :resolution="{ width: 375, height: 812 }" ref="camera" autoplay></camera>
-  <button @click="snapshot">Create snapshot</button>
+  <div class="camera-container">
+    <camera :resolution="{ width: 375, height: 812 }" ref="camera" autoplay></camera>
+    <button class="round-button" @click="snapshot"></button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -27,7 +29,39 @@ export default defineComponent({
       camera,
       snapshot
     }
-    const videoElement = ref<HTMLVideoElement | null>(null)
   }
 })
 </script>
+
+<style scoped>
+.camera-container {
+  position: relative;
+}
+
+.round-button {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  left: 50%; /* Adjust as needed */
+  transform: translateX(-50%);
+  width: 50px; /* Adjust as needed */
+  height: 50px; /* Adjust as needed */
+  border-radius: 50%;
+  background-color: #007bff; /* Adjust as needed */
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.round-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px; /* Adjust as needed */
+  height: 20px; /* Adjust as needed */
+  border-top: 2px solid #fff; /* Adjust as needed */
+  border-left: 2px solid #fff; /* Adjust as needed */
+  border-radius: 50%;
+}
+</style>
