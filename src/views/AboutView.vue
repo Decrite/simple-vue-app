@@ -22,58 +22,113 @@ export default {
       }
     },
 
-    createCameraElement() {
+    createCameraElement(): void {
       this.isLoading = true
 
-      const constraints = (window.constraints = {
+      const constraints: MediaStreamConstraints = {
         audio: false,
         video: true
-      })
+      }
 
       navigator.mediaDevices
         .getUserMedia(constraints)
-        .then((stream) => {
+        .then((stream: MediaStream) => {
           this.isLoading = false
-          this.$refs.camera.srcObject = stream
+          if (this.$refs.camera instanceof HTMLVideoElement) {
+            this.$refs.camera.srcObject = stream
+          }
         })
-        .catch((_error) => {
+        .catch((_error: any) => {
           this.isLoading = false
           alert("May the browser didn't support or there is some errors.")
         })
     },
 
-    stopCameraStream() {
-      let tracks = this.$refs.camera.srcObject.getTracks()
+    stopCameraStream(): void {
+      if (this.$refs.camera instanceof HTMLVideoElement && this.$refs.camera.srcObject) {
+        const tracks: MediaStreamTrack[] = (this.$refs.camera.srcObject as MediaStream).getTracks()
 
-      tracks.forEach((track: { stop: () => void }) => {
-        track.stop()
-      })
+        tracks.forEach((track: MediaStreamTrack) => {
+          track.stop()
+        })
+      }
     },
 
-    takePhoto() {
+    takePhoto(): void {
       if (!this.isPhotoTaken) {
         this.isShotPhoto = true
 
-        const FLASH_TIMEOUT = 50
+        const FLASH_TIMEOUT: number = 50
 
         setTimeout(() => {
           this.isShotPhoto = false
         }, FLASH_TIMEOUT)
+
+        // Draw the image on the canvas
+        const canvas: HTMLCanvasElement | null = this.$refs.canvas as HTMLCanvasElement | null
+        const camera: HTMLImageElement | null = this.$refs.camera as HTMLImageElement | null
+
+        if (canvas && camera) {
+          const context: CanvasRenderingContext2D | null = canvas.getContext('2d')
+
+          if (context) {
+            context.drawImage(camera, 0, 0, 450, 337.5)
+
+            // Get the image data from the canvas
+            const imageData: string = canvas.toDataURL('image/jpeg')
+
+            // Save the image data locally (you can modify this part as needed)
+            this.savePhotoLocally(imageData)
+          }
+        }
       }
 
       this.isPhotoTaken = !this.isPhotoTaken
-
-      const context = this.$refs.canvas.getContext('2d')
-      context.drawImage(this.$refs.camera, 0, 0, 450, 337.5)
     },
 
-    downloadImage() {
-      const download = document.getElementById('downloadPhoto')
-      const canvas = document
-        .getElementById('photoTaken')
+    displaySavedPhotos(): void {
+      const savedPhotos: string[] = this.retrieveSavedPhotos()
+      const canvas: HTMLCanvasElement | null = this.$refs.canvas as HTMLCanvasElement | null
+
+      if (canvas) {
+        const context: CanvasRenderingContext2D | null = canvas.getContext('2d')
+
+        if (context) {
+          context.clearRect(0, 0, canvas.width, canvas.height) // Clear the canvas
+
+          savedPhotos.forEach((photoData: string, index: number) => {
+            const img: HTMLImageElement = new Image()
+            img.onload = () => {
+              if (context) {
+                context.drawImage(img, 0, index * 100, 450, 337.5) // Adjust positioning as needed
+              }
+            }
+            img.src = photoData
+          })
+        }
+      }
+    },
+
+    downloadImage(): void {
+      const download: HTMLAnchorElement | any = document.getElementById('downloadPhoto')
+      const canvas: string | null = (document.getElementById('photoTaken') as HTMLCanvasElement)
         .toDataURL('image/jpeg')
         .replace('image/jpeg', 'image/octet-stream')
-      download.setAttribute('href', canvas)
+      if (download && canvas) {
+        download.setAttribute('href', canvas)
+      }
+    },
+
+    retrieveSavedPhotos(): string[] {
+      const savedPhotos: string[] = JSON.parse(localStorage.getItem('savedPhotos') || '[]')
+      return savedPhotos
+    },
+
+    savePhotoLocally(imageData: string): void {
+      const savedPhotos: string[] = this.retrieveSavedPhotos()
+      savedPhotos.push(imageData)
+      localStorage.setItem('savedPhotos', JSON.stringify(savedPhotos))
+      console.log('Photo saved locally')
     }
   }
 }
@@ -132,6 +187,16 @@ export default {
         Download
       </a>
     </div>
+  </div>
+
+  <div v-if="isPhotoTaken && isCameraOpen" class="camera-box" :class="{ flash: isShotPhoto }">
+    <canvas
+      v-show="isPhotoTaken"
+      id="photoTaken"
+      ref="canvas"
+      :width="450"
+      :height="337.5"
+    ></canvas>
   </div>
 </template>
 
