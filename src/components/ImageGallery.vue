@@ -1,22 +1,29 @@
 <template>
   <div class="image-gallery">
-    <div class="image-container" v-for="(imageSrc, index) in images" :key="index">
-      <img :src="imageSrc" :alt="`Captured Image ${index}`" class="captured-image" />
-    </div>
+    <ImageItem v-for="(imageSrc, index) in images" :key="index" :imageSrc="imageSrc" :index="index"
+      @removeImage="removeImage" />
   </div>
 </template>
-
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+import { defineComponent, PropType } from 'vue';
+import ImageItem from './ImageItem.vue'; // Stellen Sie sicher, dass der Pfad korrekt ist
 
 export default defineComponent({
+  components: {
+    ImageItem,
+  },
   props: {
     images: {
       type: Array as PropType<string[]>,
-      required: true
-    }
-  }
-})
+      required: true,
+    },
+  },
+  methods: {
+    removeImage(index: number) {
+      this.images.splice(index, 1);
+    },
+  },
+});
 </script>
 
 <style scoped>
@@ -25,32 +32,27 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  padding: 10px;
+  /* Abstand zwischen den Boxen */
 }
 
-.image-container {
-  flex: 1 1 auto;
-  max-width: calc(50% - 10px);
-  /* Anpassung für zweispaltiges Layout auf kleineren Bildschirmen */
+/* Standardmäßig 2 nebeneinander, für kleinere Bildschirme */
+.image-item {
+  flex: 1 1 calc(50% - 10px);
+  /* Abzug des Gaps, um 2 Boxen nebeneinander anzuzeigen */
+  position: relative;
 }
 
-.captured-image {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
+/* Media Query für mittelgroße Bildschirme: 3 Boxen */
 @media (min-width: 600px) {
-  .image-container {
-    max-width: calc(33.333% - 10px);
-    /* Anpassung für dreispaltiges Layout auf mittleren Bildschirmen */
+  .image-item {
+    flex: 1 1 calc(33.333% - 10px);
   }
 }
 
+/* Media Query für größere Bildschirme: 4 Boxen */
 @media (min-width: 900px) {
-  .image-container {
-    max-width: calc(25% - 10px);
-    /* Anpassung für vierspaltiges Layout auf größeren Bildschirmen */
+  .image-item {
+    flex: 1 1 calc(25% - 10px);
   }
 }
 </style>
