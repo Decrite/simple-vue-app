@@ -18,19 +18,21 @@
     />
     <button v-if="!isMobile" class="round-button toggle-button" @click="toggleCamera"></button>
     <button v-if="!isMobile" class="round-button snapshot-button" @click="snapshot"></button>
-    <svg
-      v-if="isMobile"
-      class="camera-icon"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      @click="triggerFileInput"
-      width="16"
-      height="16"
-    >
-      <path
-        d="M20 7h-1.26c-.45-1.45-1.58-2.58-3.03-3.03V2c0-.55-.45-1-1-1H9c-.55 0-1 .45-1 1v1.97C6.84 4.42 5.71 5.55 5.26 7H4c-.55 0-1 .45-1 1v13c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V8c0-.55-.45-1-1-1zM12 18c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
-      />
-    </svg>
+    <div class="phone">
+      <svg
+        v-if="isMobile"
+        class="camera-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        @click="triggerFileInput"
+        width="70"
+        height="64"
+      >
+        <path
+          d="M20 7h-1.26c-.45-1.45-1.58-2.58-3.03-3.03V2c0-.55-.45-1-1-1H9c-.55 0-1 .45-1 1v1.97C6.84 4.42 5.71 5.55 5.26 7H4c-.55 0-1 .45-1 1v13c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V8c0-.55-.45-1-1-1zM12 18c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
+        />
+      </svg>
+    </div>
   </div>
 </template>
 
@@ -50,10 +52,18 @@ export default defineComponent({
 
     // Use camera reference to call functions
     const snapshot = async () => {
-      const blob: any = await camera.value?.snapshot()
+      const cameraResolution: any = camera.value?.resolution
+
+      const blob: any = await camera.value?.snapshot(
+        { width: cameraResolution?.width, height: cameraResolution?.height },
+        'image/png',
+        0.5
+      )
+      // const blob: any = await camera.value?.snapshot()
 
       // To show the screenshot with an image tag, create a url
       const url: any = URL.createObjectURL(blob)
+
       emit('imageCaptured', url)
       console.log(url)
     }
@@ -119,5 +129,15 @@ export default defineComponent({
   transform: translateX(25%);
   width: 50px;
   height: 50px;
+}
+
+.phone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phone .camera-icon path {
+  fill: white; /* Change color to white */
 }
 </style>
