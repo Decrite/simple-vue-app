@@ -2,8 +2,8 @@
   <header class="header">MyPhotoGallery</header>
   <div class="camera-container">
     <camera v-if="!isMobile" ref="camera" autoplay></camera>
-    <button v-if="!isMobile" class="round-button snapshot-button" @click="snapshot"></button>
-    <button v-if="!isMobile" class="round-button toggle-button" @click="toggleCamera"></button>
+    <button v-if="!isMobile" class="round-button centerButton" @click="snapshot"></button>
+    <button v-if="!isMobile" class="round-button centerButton" @click="toggleCamera"></button>
 
     <input
       v-else
@@ -95,10 +95,25 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.centerButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+
+.camera-container {
+  position: relative;
+  display: inline-block;
+}
+
 .round-button {
   position: relative;
   background-color: #ff00c8;
   border: none;
+  border-radius: 50%;
   outline: none;
   cursor: pointer;
 }
