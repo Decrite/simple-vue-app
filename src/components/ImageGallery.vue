@@ -1,11 +1,12 @@
 <template>
   <div class="image-gallery">
     <ImageItem v-for="(imageSrc, index) in images" :key="index" :imageSrc="imageSrc" :index="index"
-      @removeImage="removeImage" />
+      @removeImage="removeImage" @openCarousel="openCarousel" />
   </div>
 </template>
+
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import ImageItem from './ImageItem.vue'; // Stellen Sie sicher, dass der Pfad korrekt ist
 
 export default defineComponent({
@@ -22,6 +23,8 @@ export default defineComponent({
     removeImage(index: number) {
       this.images.splice(index, 1);
     },
+
+    openCarousel(index: number) { }
   },
 });
 </script>

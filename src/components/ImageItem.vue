@@ -1,12 +1,15 @@
 <template>
-    <div class="image-item">
+    <div class="image-item" @mouseover="hover = true" @mouseleave="hover = false">
         <img :src="imageSrc" :alt="'Captured Image'" class="captured-image" />
-        <button @click="emitRemove">Löschen</button>
+        <div class="overlay" v-if="hover">
+            <button @click="openCarousel">🔍</button>
+            <button @click="emitRemove">🗑️</button>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, emits } from 'vue';
+import { defineComponent, type PropType, ref } from 'vue';
 
 export default defineComponent({
     props: {
@@ -19,12 +22,19 @@ export default defineComponent({
             required: true,
         },
     },
-    emits: ['removeImage'],
+    emits: ['removeImage', 'openCarousel'],
     setup(props, { emit }) {
+        const hover = ref(false);
+
         const emitRemove = () => {
             emit('removeImage', props.index);
         };
-        return { emitRemove };
+
+        const openCarousel = () => {
+            emit('openCarousel', props.index);
+        };
+
+        return { hover, emitRemove, openCarousel };
     },
 });
 </script>
@@ -32,25 +42,39 @@ export default defineComponent({
 <style scoped>
 .image-item {
     position: relative;
-    flex: 1 1 auto;
-    max-width: calc(50% - 10px);
-    /* Behält die ursprüngliche Styling-Logik bei */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(50% - 10px);
+    height: 150px;
+    overflow: hidden;
 }
 
-.captured-image {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    /* Ändert zu 'contain', um das Bildformat zu bewahren */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Leichter Dunkel-Effekt für bessere Sichtbarkeit der Buttons */
 }
 
 button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: red;
-    color: white;
     border: none;
     cursor: pointer;
+    background-color: transparent;
+    color: white;
+    font-size: 24px;
+}
+
+.captured-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 </style>
