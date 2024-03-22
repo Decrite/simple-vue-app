@@ -1,42 +1,33 @@
 <template>
-    <div>
-        <video ref="videoElement" autoplay></video>
-        <button @click="captureImage">Bild erfassen</button>
-    </div>
+  <camera :resolution="{ width: 375, height: 812 }" ref="camera" autoplay></camera>
+  <button @click="snapshot">Create snapshot</button>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue'
+import Camera from 'simple-vue-camera'
 
 export default defineComponent({
-    emits: ['imageCaptured'],
-    setup(props, { emit }) {
-        const videoElement = ref<HTMLVideoElement | null>(null);
+  emits: ['imageCaptured'],
+  setup(props, { emit }) {
+    // Get a reference of the component
+    const camera = ref<InstanceType<typeof Camera>>()
 
-        onMounted(async () => {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                if (videoElement.value) {
-                    videoElement.value.srcObject = stream;
-                }
-            }
-        });
+    // Use camera reference to call functions
+    const snapshot = async () => {
+      const blob = await camera.value?.snapshot()
 
-        const captureImage = () => {
-            if (videoElement.value) {
-                const canvas = document.createElement('canvas');
-                canvas.width = videoElement.value.videoWidth;
-                canvas.height = videoElement.value.videoHeight;
-                const ctx = canvas.getContext('2d');
-                if (ctx) {
-                    ctx.drawImage(videoElement.value, 0, 0, canvas.width, canvas.height);
-                    const imageUrl = canvas.toDataURL('image/png');
-                    emit('imageCaptured', imageUrl);
-                }
-            }
-        };
+      // To show the screenshot with an image tag, create a url
+      const url = URL.createObjectURL(blob)
+      emit('imageCaptured', url)
+      console.log(url)
+    }
 
-        return { videoElement, captureImage };
-    },
-});
+    return {
+      camera,
+      snapshot
+    }
+    const videoElement = ref<HTMLVideoElement | null>(null)
+  }
+})
 </script>
