@@ -1,6 +1,8 @@
+
 <template>
   <CameraView @imageCaptured="addImage" />
   <ImageGallery :images="images" />
+
 </template>
 
 <script lang="ts">
