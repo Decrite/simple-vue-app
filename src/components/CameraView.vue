@@ -1,7 +1,9 @@
 <template>
   <div class="camera-container">
     <camera :resolution="{ width: 375, height: 812 }" ref="camera" autoplay></camera>
-    <button class="round-button" @click="snapshot"></button>
+    <button class="round-button toggle-button" @click="toggleCamera"></button>
+    <button class="round-button snapshot-button" @click="snapshot"></button>
+    <input type="file" name="image" accept="image/*" capture="user" />
   </div>
 </template>
 
@@ -25,9 +27,21 @@ export default defineComponent({
       console.log(url)
     }
 
+    // Method to toggle the camera facing mode
+    const toggleCamera = async () => {
+      const devices = await navigator.mediaDevices.enumerateDevices()
+      const videoDevices = devices.filter((device) => device.kind === 'videoinput')
+      const currentDeviceId = camera.value?.currentDeviceID()
+      const newDevice = videoDevices.find((device) => device.deviceId !== currentDeviceId)
+      if (newDevice) {
+        await camera.value?.changeCamera(newDevice.deviceId)
+      }
+    }
+
     return {
       camera,
-      snapshot
+      snapshot,
+      toggleCamera
     }
   }
 })
@@ -40,28 +54,25 @@ export default defineComponent({
 
 .round-button {
   position: absolute;
-  bottom: 10px; /* Adjust as needed */
-  left: 50%; /* Adjust as needed */
-  transform: translateX(-50%);
-  width: 50px; /* Adjust as needed */
-  height: 50px; /* Adjust as needed */
+  bottom: 10px;
   border-radius: 50%;
-  background-color: #007bff; /* Adjust as needed */
+  background-color: #ff00c8;
   border: none;
   outline: none;
   cursor: pointer;
 }
 
-.round-button::before {
-  content: '';
-  position: absolute;
-  top: 50%;
+.snapshot-button {
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 20px; /* Adjust as needed */
-  height: 20px; /* Adjust as needed */
-  border-top: 2px solid #fff; /* Adjust as needed */
-  border-left: 2px solid #fff; /* Adjust as needed */
-  border-radius: 50%;
+  transform: translateX(-75%);
+  width: 50px;
+  height: 50px;
+}
+
+.toggle-button {
+  left: 0%;
+  transform: translateX(25%);
+  width: 50px;
+  height: 50px;
 }
 </style>
