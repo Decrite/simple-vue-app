@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, type PropType } from 'vue';
 import ImageItem from './ImageItem.vue';
 import axios from 'axios';
 
@@ -14,7 +14,7 @@ export default defineComponent({
   components: { ImageItem },
   props: {
     images: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true,
     },
   },
