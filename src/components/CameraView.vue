@@ -63,8 +63,7 @@ export default defineComponent({
 
     const handleImageInput = (event: any) => {
       const file = event.target.files[0]
-      const url = URL.createObjectURL(file)
-      emit('imageCaptured', url)
+      emit('imageCaptured', file)
     }
 
     const triggerFileInput = () => fileInput.value?.click()
