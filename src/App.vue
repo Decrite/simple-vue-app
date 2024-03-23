@@ -37,30 +37,25 @@ export default defineComponent({
       images.value = data
     })
 
-    const addImage = async (imageSrc) => {
-      const reader = new FileReader()
+    const addImage = async (imageSrc: any) => {
+      const formData = new FormData()
+      formData.append('image', imageSrc, 'image.jpg')
 
-      reader.onload = async () => {
-        const base64String = reader.result.split(',')[1]
-        console.log(imageSrc)
+      // Send the FormData to the backend
+      const response = await fetch('https://rgsimplenodeapp.azurewebsites.net/api/upload', {
+        method: 'POST',
+        body: formData
+      })
 
-        const response = await axios.post('https://rgsimplenodeapp.azurewebsites.net/setPicture', {
-          data: base64String
-        })
-
-        console.log('AddImage Response Data ', response.data)
-        const blob = await fetch(
-          `data:${response.data.contentType};base64,${response.data.data}`
-        ).then((res) => res.blob())
-        console.log('Uploaded Blob: ', blob)
-
-        const test = URL.createObjectURL(blob)
-        console.log(test)
-
-        images.value = [...images.value, response.data]
+      if (response.ok) {
+        // Get the image from the response
+        const imageBlob = await response.blob()
+        const imageUrl = URL.createObjectURL(imageBlob)
+        console.log(imageUrl)
+        console.log('Image uploaded successfully')
+      } else {
+        console.error('Image upload failed')
       }
-
-      reader.readAsDataURL(imageSrc)
     }
 
     return { images, addImage }
