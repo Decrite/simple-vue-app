@@ -44,10 +44,10 @@ export default defineComponent({
       }
     }
 
-    const handleImageInput = (event: Event) => {
-      const file = (event.target as HTMLInputElement).files?.[0]
-      if (!file) return;
-      emit('imageCaptured', file)
+    const handleImageInput = (event: any) => {
+      const file = event.target.files[0]
+      const url = URL.createObjectURL(file)
+      emit('imageCaptured', url)
     }
 
     const triggerFileInput = () => fileInput.value?.click()
@@ -58,5 +58,62 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Stil-Anpassungen beibehalten */
+.centerButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+
+.camera-container {
+  position: relative;
+  display: inline-block;
+}
+
+.round-button {
+  position: relative;
+  background-color: #ff00c8;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+}
+
+.snapshot-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  bottom: 10px;
+}
+
+.toggle-button {
+  position: absolute;
+  left: calc(50% + 50px);
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  bottom: 10px;
+}
+
+.phone {
+  padding-top: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.phone .camera-icon path {
+  fill: white;
+}
+
+.header {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
 </style>
