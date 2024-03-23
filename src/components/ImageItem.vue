@@ -1,6 +1,7 @@
 <template>
     <div class="image-item" @mouseover="hover = true" @mouseleave="hover = false">
-        <img :src="imageSrc" :alt="'Captured Image'" class="captured-image" />
+        <img :src='"https://rgsimplenodeapp.azurewebsites.net/uploads/" + imageSrc' :alt="'Captured Image'"
+            class="captured-image" />
         <div class="overlay" v-if="hover">
             <!-- <button @click="openCarousel">🔍</button>-->
             <button @click="emitRemove">🗑️</button>
@@ -27,7 +28,7 @@ export default defineComponent({
         const hover = ref(false);
 
         const emitRemove = () => {
-            emit('removeImage', props.index);
+            emit('removeImage', props.imageSrc, props.index);
         };
 
         const openCarousel = () => {
