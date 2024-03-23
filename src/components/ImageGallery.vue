@@ -1,19 +1,14 @@
 <template>
   <div class="image-gallery">
-    <ImageItem
-      v-for="(imageSrc, index) in images"
-      :key="index"
-      :imageSrc="imageSrc"
-      :index="index"
-      @removeImage="removeImage"
-      @openCarousel="openCarousel"
-    />
+    <ImageItem v-for="(imageSrc, index) in images" :key="index" :imageSrc="imageSrc" :index="index"
+      @removeImage="removeImage" @openCarousel="openCarousel" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
 import ImageItem from './ImageItem.vue'
+import axios from 'axios'
 
 export default defineComponent({
   components: {
@@ -26,11 +21,12 @@ export default defineComponent({
     }
   },
   methods: {
-    removeImage(index: number) {
+    async removeImage(index: number) {
+      await axios.delete(`https://rgsimplenodeapp.azurewebsites.net/deletePicture/${index}`)
       this.images.splice(index, 1)
     },
 
-    openCarousel(index: number) {}
+    openCarousel(index: number) { }
   }
 })
 </script>
