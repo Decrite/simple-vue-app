@@ -2,6 +2,9 @@
   <header class="header">MyPhotoGallery</header>
   <div class="camera-container">
     <camera v-if="!isMobile" ref="camera" autoplay></camera>
+    <button v-if="!isMobile" class="round-button centerButton" @click="snapshot"></button>
+    <button v-if="!isMobile" class="round-button centerButton" @click="toggleCamera"></button>
+
     <input
       v-else
       type="file"
@@ -12,8 +15,6 @@
       ref="fileInput"
       style="display: none"
     />
-    <button v-if="!isMobile" class="round-button toggle-button" @click="toggleCamera"></button>
-    <button v-if="!isMobile" class="round-button snapshot-button" @click="snapshot"></button>
     <div class="phone">
       <svg
         v-if="isMobile"
@@ -39,14 +40,12 @@ import Camera from 'simple-vue-camera'
 export default defineComponent({
   emits: ['imageCaptured'],
   setup(props, { emit }) {
-    // Get a reference of the component
     const camera = ref<InstanceType<typeof Camera>>()
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
       navigator.userAgent
     )
     const fileInput = ref<HTMLInputElement | null>(null)
 
-    // Use camera reference to call functions
     const snapshot = async () => {
       const cameraResolution: any = camera.value?.resolution
 
@@ -56,14 +55,12 @@ export default defineComponent({
         0.5
       )
 
-      // To show the screenshot with an image tag, create a url
       const url: any = URL.createObjectURL(blob)
 
       emit('imageCaptured', url)
       console.log(url)
     }
 
-    // Method to toggle the camera facing mode
     const toggleCamera = async () => {
       const devices = await navigator.mediaDevices.enumerateDevices()
       const videoDevices = devices.filter((device) => device.kind === 'videoinput')
@@ -98,34 +95,45 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.centerButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+}
+
 .camera-container {
   position: relative;
+  display: inline-block;
 }
 
 .round-button {
-  position: absolute;
-  bottom: 10px;
-  border-radius: 50%;
+  position: relative;
   background-color: #ff00c8;
   border: none;
+  border-radius: 50%;
   outline: none;
   cursor: pointer;
 }
 
 .snapshot-button {
+  position: absolute;
   left: 50%;
-  transform: translateX(-75%);
+  transform: translateX(-50%);
   width: 50px;
   height: 50px;
-  bottom: 23%;
+  bottom: 10px;
 }
 
 .toggle-button {
-  left: 0%;
-  transform: translateX(25%);
+  position: absolute;
+  left: calc(50% + 50px);
+  transform: translateX(-50%);
   width: 50px;
   height: 50px;
-  bottom: 23%;
+  bottom: 10px;
 }
 
 .phone {
@@ -137,7 +145,6 @@ export default defineComponent({
 
 .phone .camera-icon path {
   fill: white;
-  /* Change color to white */
 }
 
 .header {

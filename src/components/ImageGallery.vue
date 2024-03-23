@@ -1,32 +1,38 @@
 <template>
   <div class="image-gallery">
-    <ImageItem v-for="(imageSrc, index) in images" :key="index" :imageSrc="imageSrc" :index="index"
-      @removeImage="removeImage" @openCarousel="openCarousel" />
+    <ImageItem
+      v-for="(imageSrc, index) in images"
+      :key="index"
+      :imageSrc="imageSrc"
+      :index="index"
+      @removeImage="removeImage"
+      @openCarousel="openCarousel"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import ImageItem from './ImageItem.vue'; // Stellen Sie sicher, dass der Pfad korrekt ist
+import { defineComponent, type PropType } from 'vue'
+import ImageItem from './ImageItem.vue'
 
 export default defineComponent({
   components: {
-    ImageItem,
+    ImageItem
   },
   props: {
     images: {
       type: Array as PropType<string[]>,
-      required: true,
-    },
+      required: true
+    }
   },
   methods: {
     removeImage(index: number) {
-      this.images.splice(index, 1);
+      this.images.splice(index, 1)
     },
 
-    openCarousel(index: number) { }
-  },
-});
+    openCarousel(index: number) {}
+  }
+})
 </script>
 
 <style scoped>
@@ -35,24 +41,19 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  /* Abstand zwischen den Boxen */
 }
 
-/* Standardmäßig 2 nebeneinander, für kleinere Bildschirme */
 .image-item {
   flex: 1 1 calc(50% - 10px);
-  /* Abzug des Gaps, um 2 Boxen nebeneinander anzuzeigen */
   position: relative;
 }
 
-/* Media Query für mittelgroße Bildschirme: 3 Boxen */
 @media (min-width: 600px) {
   .image-item {
     flex: 1 1 calc(33.333% - 10px);
   }
 }
 
-/* Media Query für größere Bildschirme: 4 Boxen */
 @media (min-width: 900px) {
   .image-item {
     flex: 1 1 calc(25% - 10px);
