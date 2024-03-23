@@ -1,41 +1,28 @@
 <template>
     <div class="image-item" @mouseover="hover = true" @mouseleave="hover = false">
-        <img :src='"https://rgsimplenodeapp.azurewebsites.net/uploads/" + imageSrc' :alt="'Captured Image'"
+        <img :src='"https://rgsimplenodeapp.azurewebsites.net/uploads/" + imageSrc' alt="Captured Image"
             class="captured-image" />
         <div class="overlay" v-if="hover">
-            <!-- <button @click="openCarousel">🔍</button>-->
             <button @click="emitRemove">🗑️</button>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType, ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
     props: {
-        imageSrc: {
-            type: String as PropType<string>,
-            required: true,
-        },
-        index: {
-            type: Number as PropType<number>,
-            required: true,
-        },
+        imageSrc: String,
+        index: Number,
     },
-    emits: ['removeImage', 'openCarousel'],
+    emits: ['removeImage'],
     setup(props, { emit }) {
         const hover = ref(false);
 
-        const emitRemove = () => {
-            emit('removeImage', props.imageSrc, props.index);
-        };
+        const emitRemove = () => emit('removeImage', props.imageSrc, props.index);
 
-        const openCarousel = () => {
-            emit('openCarousel', props.index);
-        };
-
-        return { hover, emitRemove, openCarousel };
+        return { hover, emitRemove };
     },
 });
 </script>
@@ -60,9 +47,7 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     background-color: rgba(0, 0, 0, 0.5);
-    /* Leichter Dunkel-Effekt für bessere Sichtbarkeit der Buttons */
 }
 
 button {

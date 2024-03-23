@@ -1,34 +1,34 @@
 <template>
   <div class="image-gallery">
     <ImageItem v-for="(imageSrc, index) in images" :key="index" :imageSrc="imageSrc" :index="index"
-      @removeImage="removeImage" @openCarousel="openCarousel" />
+      @removeImage="removeImage" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue'
-import ImageItem from './ImageItem.vue'
-import axios from 'axios'
+import { defineComponent } from 'vue';
+import ImageItem from './ImageItem.vue';
+import axios from 'axios';
 
 export default defineComponent({
-  components: {
-    ImageItem
-  },
+  components: { ImageItem },
   props: {
     images: {
-      type: Array as PropType<string[]>,
-      required: true
-    }
+      type: Array,
+      required: true,
+    },
   },
   methods: {
     async removeImage(filename: string, index: number) {
-      await axios.delete(`https://rgsimplenodeapp.azurewebsites.net/api/delete/${filename}`)
-      this.images.splice(index, 1)
+      try {
+        await axios.delete(`https://rgsimplenodeapp.azurewebsites.net/api/delete/${filename}`);
+        this.images.splice(index, 1);
+      } catch (error) {
+        console.error('Failed to delete image', error);
+      }
     },
-
-    openCarousel(index: number) { }
-  }
-})
+  },
+});
 </script>
 
 <style scoped>
@@ -39,20 +39,15 @@ export default defineComponent({
   gap: 10px;
 }
 
-.image-item {
-  flex: 1 1 calc(50% - 10px);
-  position: relative;
-}
-
 @media (min-width: 600px) {
   .image-item {
-    flex: 1 1 calc(33.333% - 10px);
+    flex-basis: calc(33.333% - 10px);
   }
 }
 
 @media (min-width: 900px) {
   .image-item {
-    flex: 1 1 calc(25% - 10px);
+    flex-basis: calc(25% - 10px);
   }
 }
 </style>
