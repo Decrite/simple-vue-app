@@ -19,7 +19,7 @@ export default defineComponent({
 
     const updateImages = async () => {
       try {
-        const { data } = await axios.get('https://rgsimplenodeapp.azurewebsites.net/getPictures');
+        const { data } = await axios.get('https://istEgal.azurewebsites.net/getPictures');
         images.value = data;
       } catch (error) {
         console.error('Failed to fetch images', error);
@@ -33,7 +33,7 @@ export default defineComponent({
       formData.append('image', new Blob([imageSrc]), 'image.jpg');
 
       try {
-        const response = await fetch('https://rgsimplenodeapp.azurewebsites.net/api/upload', {
+        const response = await fetch('https://istEgal.azurewebsites.net/api/upload', {
           method: 'POST',
           body: formData,
         });
