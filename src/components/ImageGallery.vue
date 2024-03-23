@@ -21,7 +21,7 @@ export default defineComponent({
   methods: {
     async removeImage(filename: string, index: number) {
       try {
-        await axios.delete(`https://rgsimplenodeapp.azurewebsites.net/api/delete/${filename}`);
+        await axios.delete(`https://istEgal.azurewebsites.net/api/delete/${filename}`);
         this.images.splice(index, 1);
       } catch (error) {
         console.error('Failed to delete image', error);

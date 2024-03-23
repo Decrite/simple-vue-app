@@ -1,6 +1,6 @@
 <template>
     <div class="image-item" @mouseover="hover = true" @mouseleave="hover = false">
-        <img :src='"https://rgsimplenodeapp.azurewebsites.net/uploads/" + imageSrc' alt="Captured Image"
+        <img :src='"https://istEgal.azurewebsites.net/uploads/" + imageSrc' alt="Captured Image"
             class="captured-image" />
         <div class="overlay" v-if="hover">
             <button @click="emitRemove">🗑️</button>
