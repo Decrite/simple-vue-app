@@ -37,11 +37,11 @@ export default defineComponent({
       images.value = data
     })
 
-    const addImage = async (imageSrc) => {
+    const addImage = async (imageSrc: any) => {
       const reader = new FileReader()
 
       reader.onload = async () => {
-        const base64String = reader.result.split(',')[1]
+        const base64String = typeof reader.result === 'string' ? reader.result.split(',')[1] : null;
         console.log(imageSrc)
 
         const response = await axios.post('https://rgsimplenodeapp.azurewebsites.net/setPicture', {
