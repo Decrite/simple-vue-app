@@ -2,8 +2,8 @@
   <header class="header">MyPhotoGallery</header>
   <div class="camera-container">
     <camera v-if="!isMobile" ref="camera" autoplay></camera>
-    <button v-if="!isMobile" class="round-button" @click="snapshot">📸</button>
-    <button v-if="!isMobile" class="round-button" @click="toggleCamera">🔄</button>
+    <button v-if="!isMobile" class="round-button centerButton" @click="snapshot">📸</button>
+    <button v-if="!isMobile" class="round-button centerButton" @click="toggleCamera">🔄</button>
 
     <input v-else type="file" name="image" accept="image/*" capture="user" @change="handleImageInput" ref="fileInput"
       style="display: none" />
